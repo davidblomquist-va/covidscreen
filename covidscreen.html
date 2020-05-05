@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+	
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	
+	<title>COVID Screening</title>
+	
+	<style type="text/css">
+	body, html {
+		height:100%;
+	}
+	
+	#result-text {
+		font-size:20vmin;
+		text-align:center;
+	}
+	
+	#dow {
+		font-size:13vmin;
+		text-align: center;
+	}
+	
+	#time {
+		font-size: 16vmin;
+		text-align: center;
+	}
+	
+	#result-header {
+		text-align: center;
+		font-size:10vmin;
+	}
+	</style>
+	
+	<script type="text/javascript">
+	var answers = {};
+	
+	function answerQuestion(questionId, answer, callback) {
+		answers[questionId] = answer;
+		
+				$('#answers_' + questionId + ' a').removeClass('active');
+				$('#answer_' + questionId + '_' + answer).addClass('active');
+		
+		callback();
+	}
+	
+	function showQuestion(questionId) {
+		$('#collapse_' + questionId).collapse('show');
+	}
+	
+	function finishQuestions() {
+				const numQuestions = 5;
+		for (var i = 0; i < numQuestions; i++) {
+			if (!answers.hasOwnProperty(i)) {
+				showQuestion(i);
+			}
+		}
+		
+				var problems = Object.values(answers).reduce((aggregate, current) => aggregate || current == 'yes', false);
+		
+				const today = new Date();
+		location.search = 'result=' + (problems ? 'sick' : 'notsick') + '&time=' + Math.round(today.getTime());
+	}
+	</script>
+</head>
+
+<body class="h-100">
+	<div id="resultspace" class="d-none w-100 h-100 d-none p-2">
+		<h1 id="result-header">COVID Screening</h1>
+		<h2 id="result-text"></h2>
+		<h3 id="dow"></h3>
+		<h3 id="time"></h3>
+		<div class="text-center"><a href="?" class="btn btn-primary btn-lg" role="button">Re-take</a></div>
+	</div>
+
+	<div id="questionspace" class="d-none">
+		<header>
+			<h1 class="w-100 text-center">VA COVID Screening</h1>
+		</header>
+		<div class="accordion" id="questions">
+				<div class="card" id="question_0">
+		<div class="card-header" id="collapse_head_0">
+			<h2 class="mb-0">
+				<button class="btn btn-link " type="button" data-toggle="collapse" data-target="#collapse_0" aria-expanded="true" aria-controls="collapse_0">
+					Intro				</button>
+			</h2>
+		</div>
+	
+		<div id="collapse_0" class="collapse" aria-labelledby="collapse_head_0" data-parent="#questions">
+			<div class="card-body">
+				<p>Welcome to the VA COVID Screening Questionnaire!</p>
+				<div class="list-group" id="answers_0">
+											<a href="#collapse_head_1" id="answer_0_start" class="list-group-item list-group-item-action" onclick="answerQuestion(0, 'start', function() { showQuestion(1); });">Start</a>
+										
+				</div>
+			</div>
+		</div>
+	</div>
+		<div class="card" id="question_1">
+		<div class="card-header" id="collapse_head_1">
+			<h2 class="mb-0">
+				<button class="btn btn-link " type="button" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" aria-controls="collapse_1">
+					Question 1				</button>
+			</h2>
+		</div>
+	
+		<div id="collapse_1" class="collapse" aria-labelledby="collapse_head_1" data-parent="#questions">
+			<div class="card-body">
+				<p>Do you have a fever or worsening cough or shortness of breath or flu-like symptoms?</p>
+				<div class="list-group" id="answers_1">
+											<a href="#collapse_head_2" id="answer_1_yes" class="list-group-item list-group-item-action" onclick="answerQuestion(1, 'yes', function() { showQuestion(2); });">Yes</a>
+											<a href="#collapse_head_2" id="answer_1_no" class="list-group-item list-group-item-action" onclick="answerQuestion(1, 'no', function() { showQuestion(2); });">No</a>
+										
+				</div>
+			</div>
+		</div>
+	</div>
+		<div class="card" id="question_2">
+		<div class="card-header" id="collapse_head_2">
+			<h2 class="mb-0">
+				<button class="btn btn-link " type="button" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" aria-controls="collapse_2">
+					Question 2				</button>
+			</h2>
+		</div>
+	
+		<div id="collapse_2" class="collapse" aria-labelledby="collapse_head_2" data-parent="#questions">
+			<div class="card-body">
+				<p>Have you or a close contact traveled to an area with widespread or sustained community transmission of COVID-19 within 14 days of symptom onset?</p>
+				<div class="list-group" id="answers_2">
+											<a href="#collapse_head_3" id="answer_2_yes" class="list-group-item list-group-item-action" onclick="answerQuestion(2, 'yes', function() { showQuestion(3); });">Yes</a>
+											<a href="#collapse_head_3" id="answer_2_no" class="list-group-item list-group-item-action" onclick="answerQuestion(2, 'no', function() { showQuestion(3); });">No</a>
+										
+				</div>
+			</div>
+		</div>
+	</div>
+		<div class="card" id="question_3">
+		<div class="card-header" id="collapse_head_3">
+			<h2 class="mb-0">
+				<button class="btn btn-link " type="button" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" aria-controls="collapse_3">
+					Question 3				</button>
+			</h2>
+		</div>
+	
+		<div id="collapse_3" class="collapse" aria-labelledby="collapse_head_3" data-parent="#questions">
+			<div class="card-body">
+				<p>Have you been in close contact with someone, including health care workers, confirmed to have COVID-19?</p>
+				<div class="list-group" id="answers_3">
+											<a href="#collapse_head_4" id="answer_3_yes" class="list-group-item list-group-item-action" onclick="answerQuestion(3, 'yes', function() { showQuestion(4); });">Yes</a>
+											<a href="#collapse_head_4" id="answer_3_no" class="list-group-item list-group-item-action" onclick="answerQuestion(3, 'no', function() { showQuestion(4); });">No</a>
+										
+				</div>
+			</div>
+		</div>
+	</div>
+		<div class="card" id="question_4">
+		<div class="card-header" id="collapse_head_4">
+			<h2 class="mb-0">
+				<button class="btn btn-link " type="button" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" aria-controls="collapse_4">
+					Finish				</button>
+			</h2>
+		</div>
+	
+		<div id="collapse_4" class="collapse" aria-labelledby="collapse_head_4" data-parent="#questions">
+			<div class="card-body">
+				<p>Thank you for finishing the questionnaire.</p>
+				<div class="list-group" id="answers_4">
+											<a href="#" id="answer_4_finish" class="list-group-item list-group-item-action" onclick="answerQuestion(4, 'finish', function() { finishQuestions(); });">Finish</a>
+										
+				</div>
+			</div>
+		</div>
+	</div>
+			</div>
+	</div>
+	
+	<script type="text/javascript">
+		showQuestion(0);
+	
+	//show the appropriate page based on the situation
+	const GET_VARS = new URLSearchParams(window.location.search);
+	if (GET_VARS.has('result')) {		
+		const isSafe = GET_VARS.get('result') == 'notsick';
+		
+		//set the color
+		$('#resultspace').addClass(isSafe ? 'bg-success' : 'bg-danger');
+		$('#result-text').html(isSafe ? 'SCREENED' : 'ADDITIONAL SCREENING NEEDED');
+		
+		//set the colors
+		if (GET_VARS.has('time')) {
+			const date = new Date(parseInt(GET_VARS.get('time')));
+			console.log(date);
+			
+			$('#dow').html(new Intl.DateTimeFormat('en-US', {weekday: 'long'}).format(date));
+			$('#time').html(new Intl.DateTimeFormat('en-US', {month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'}).format(date));
+		} else {
+			$('#dow').html('INVALID');
+			$('#time').html('INVALID');
+		}
+		
+		$('#resultspace').addClass('d-inline-block');
+		$('#resultspace').removeClass('d-none');
+	} else {
+		$('#questionspace').removeClass('d-none');
+	}
+	</script>
+</body>
+</html>
